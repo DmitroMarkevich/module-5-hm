@@ -5,10 +5,7 @@ import org.example.entities.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,10 +20,10 @@ public class DatabaseQueryService {
     public List<MaxProjectCountClient> findMaxProjectCountClient() {
         List<MaxProjectCountClient> maxProjectCountClients = new ArrayList<>();
 
-        try (Connection connection = Database.getInstance().getConnection();
-             Statement statement = connection.createStatement()) {
+        try (Connection connection = Database.getInstance().getConnection()) {
             String sqlCommand = Files.readString(Path.of(PATH_DB_MAX_PROJECTS_COUNT));
-            ResultSet resultSet = statement.executeQuery(sqlCommand);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlCommand);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
@@ -34,6 +31,7 @@ public class DatabaseQueryService {
                 maxProjectCountClients.add(new MaxProjectCountClient(name, projectCount));
             }
             resultSet.close();
+            preparedStatement.close();
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
@@ -43,10 +41,10 @@ public class DatabaseQueryService {
     public List<MaxSalaryWorker> findMaxSalaryWorker() {
         List<MaxSalaryWorker> maxSalaryWorkers = new ArrayList<>();
 
-        try (Connection connection = Database.getInstance().getConnection();
-             Statement statement = connection.createStatement()) {
+        try (Connection connection = Database.getInstance().getConnection()) {
             String sqlCommand = Files.readString(Path.of(PATH_DB_MAX_SALARY_WORKER));
-            ResultSet resultSet = statement.executeQuery(sqlCommand);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlCommand);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
@@ -54,6 +52,7 @@ public class DatabaseQueryService {
                 maxSalaryWorkers.add(new MaxSalaryWorker(name, workerSalary));
             }
             resultSet.close();
+            preparedStatement.close();
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
@@ -63,10 +62,10 @@ public class DatabaseQueryService {
     public List<LongestProject> findLongestProject() {
         List<LongestProject> longestProjects = new ArrayList<>();
 
-        try (Connection connection = Database.getInstance().getConnection();
-             Statement statement = connection.createStatement()) {
+        try (Connection connection = Database.getInstance().getConnection()) {
             String sqlCommand = Files.readString(Path.of(PATH_DB_LONGEST_PROJECT));
-            ResultSet resultSet = statement.executeQuery(sqlCommand);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlCommand);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
@@ -74,6 +73,7 @@ public class DatabaseQueryService {
                 longestProjects.add(new LongestProject(name, projectMonthCount));
             }
             resultSet.close();
+            preparedStatement.close();
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
@@ -83,10 +83,10 @@ public class DatabaseQueryService {
     public List<YoungestEldestWorker> findYoungestEldestWorker() {
         List<YoungestEldestWorker> youngestEldestWorkers = new ArrayList<>();
 
-        try (Connection connection = Database.getInstance().getConnection();
-             Statement statement = connection.createStatement()) {
+        try (Connection connection = Database.getInstance().getConnection()) {
             String sqlCommand = Files.readString(Path.of(PATH_DB_YOUNGEST_ELDEST_WORKER));
-            ResultSet resultSet = statement.executeQuery(sqlCommand);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlCommand);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 String type = resultSet.getString("type");
@@ -95,6 +95,7 @@ public class DatabaseQueryService {
                 youngestEldestWorkers.add(new YoungestEldestWorker(type, name, workerBirthday));
             }
             resultSet.close();
+            preparedStatement.close();
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
@@ -104,10 +105,10 @@ public class DatabaseQueryService {
     public List<Project> findProjects() {
         List<Project> projects = new ArrayList<>();
 
-        try (Connection connection = Database.getInstance().getConnection();
-             Statement statement = connection.createStatement()) {
+        try (Connection connection = Database.getInstance().getConnection()) {
             String sqlCommand = Files.readString(Path.of(PATH_DB_PRINT_PROJECT_PRICES));
-            ResultSet resultSet = statement.executeQuery(sqlCommand);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlCommand);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 String name = resultSet.getString("id");
@@ -115,6 +116,7 @@ public class DatabaseQueryService {
                 projects.add(new Project(name, projectPrice));
             }
             resultSet.close();
+            preparedStatement.close();
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
